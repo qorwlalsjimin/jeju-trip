@@ -19,7 +19,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 /* Layout: 지도가 주인공 — 데스크톱은 지도 | 목록 2단, 모바일은 지도 위·목록 아래. 항공권은 탑승권 카드. */
@@ -140,19 +139,23 @@ textarea.input{min-height:72px;resize:vertical}
 .err{color:var(--danger);font-size:13px;margin:0}
 
 /* ── map pins ── */
-.pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.pin{padding:0;cursor:pointer;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
 .pin span{transform:rotate(45deg);color:#fff;font:700 12px var(--f-body)}
 .pin.temp{background:var(--ink);animation:bob .9s ease-in-out infinite alternate}
 .pin.sel{outline:3px solid var(--ink);outline-offset:1px}
 @keyframes bob{to{translate:0 -4px}}
 @media (prefers-reduced-motion: reduce){.pin.temp{animation:none}}
-.leaflet-popup-content{font-family:var(--f-body);margin:12px 14px}
+.info-wrap{padding-bottom:44px}
+.info{position:relative;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:12px 32px 12px 14px;width:240px;white-space:normal}
+.info::after{content:"";position:absolute;left:50%;bottom:-7px;width:12px;height:12px;background:var(--surface);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+.info-x{position:absolute;top:6px;right:6px;border:0;background:none;font-size:18px;line-height:1;padding:4px 6px;color:var(--muted)}
 .pop strong{font-size:14px;display:block}
-.pop .meta{color:#5D6A67;font-size:12px}
-.pop p{margin:6px 0;white-space:pre-wrap}
-.pop .links{display:flex;gap:10px;font-size:12.5px}
-.leaflet-container a.pop-a{color:#C45E1C}
-.picking #map{cursor:crosshair}
+.pop .meta{color:var(--muted);font-size:12px}
+.pop p{margin:6px 0;white-space:pre-wrap;font-size:13px}
+.pop .links{display:flex;gap:10px;font-size:12.5px;margin-top:6px}
+.pop .links a{color:var(--accent);text-underline-offset:2px}
+.map-msg{height:100%;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:14px}
+.map-msg b{display:block;color:var(--ink);margin-bottom:4px}
 
 /* ── flights ── */
 .flights{max-width:880px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:20px}
@@ -265,11 +268,11 @@ textarea.input{min-height:72px;resize:vertical}
           <div class="field">
             <label for="fSearch">위치</label>
             <div class="row">
-              <input class="input" id="fSearch" placeholder="장소명이나 주소로 검색" autocomplete="off">
+              <input class="input" id="fSearch" placeholder="카카오맵에서 장소명·주소 검색" autocomplete="off">
               <button class="btn small" type="button" id="searchBtn">검색</button>
             </div>
             <ul class="results" id="results" hidden></ul>
-            <p class="hint">검색 결과가 없으면 <b>지도를 눌러</b> 위치를 찍어주세요. 핀은 끌어서 옮길 수 있어요.</p>
+            <p class="hint">검색 결과가 없으면 <b>지도를 눌러</b> 위치를 찍어주세요. 다시 누르면 핀이 옮겨져요.</p>
             <div class="loc" id="locBox">위치를 아직 정하지 않았어요</div>
           </div>
           <div class="field">
@@ -304,11 +307,11 @@ textarea.input{min-height:72px;resize:vertical}
 </div>
 <div class="toast" id="toast" hidden></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
+<script src="kakao-config.js"></script>
 <script>
 (() => {
 "use strict";
@@ -319,7 +322,8 @@ const CATS = {
   cafe: { label: "카페",   short: "카" },
   fun:  { label: "유원지", short: "놀" },
 };
-const JEJU = { center: [33.38, 126.56], zoom: 10 };
+const JEJU = { center: [33.38, 126.56], sw: [33.10, 126.10], ne: [33.62, 127.00] };
+const KAKAO_CAT = { FD6: "food", CE7: "cafe", AT4: "fun", CT1: "fun" };
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const safeUrl = (u) => /^https?:\/\//i.test(u || "") ? u : "";
@@ -416,7 +420,7 @@ function setTab(which) {
   $("tabMap").setAttribute("aria-selected", isMap);
   $("tabFlights").setAttribute("aria-selected", !isMap);
   $("viewMap").hidden = !isMap; $("viewFlights").hidden = isMap;
-  if (isMap) setTimeout(() => map.invalidateSize(), 0);
+  if (isMap) setTimeout(relayout, 0);
 }
 $("tabMap").onclick = () => setTab("map");
 $("tabFlights").onclick = () => setTab("flights");
@@ -425,67 +429,111 @@ function fitChrome() {
   const h = $("top").offsetHeight + document.querySelector(".tabs").offsetHeight + ($("demoBanner").hidden ? 0 : $("demoBanner").offsetHeight);
   document.documentElement.style.setProperty("--chrome", h + "px");
 }
-addEventListener("resize", () => { fitChrome(); map.invalidateSize(); });
+addEventListener("resize", () => { fitChrome(); relayout(); });
 
-/* ───────── 지도 ───────── */
-const map = L.map("map", { zoomControl: true, attributionControl: true }).setView(JEJU.center, JEJU.zoom);
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-}).addTo(map);
+/* ───────── 지도 (카카오맵) ───────── */
+let map = null, kPlaces = null, geocoder = null, infoOverlay = null, tempOverlay = null;
 const markers = new Map();
-const pinIcon = (cat, sel) => L.divIcon({
-  className: "", iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -28],
-  html: `<div class="pin c-${cat}${sel ? " sel" : ""}"><span>${CATS[cat].short}</span></div>`,
-});
-const tempIcon = L.divIcon({ className: "", iconSize: [30, 30], iconAnchor: [15, 30], html: `<div class="pin temp"><span>＋</span></div>` });
-let tempMarker = null;
+const LL = (lat, lng) => new kakao.maps.LatLng(lat, lng);
+const kakaoLink = (p) => p.kakaoUrl || `https://map.kakao.com/link/search/${encodeURIComponent(p.name)}`;
+
+function showMapMsg(title, body) {
+  $("map").innerHTML = `<div class="map-msg"><div><b>${esc(title)}</b>${esc(body)}</div></div>`;
+}
+function loadKakao() {
+  const key = (window.KAKAO_JS_KEY || "").trim();
+  if (!key) return showMapMsg("카카오맵 키가 아직 없어요", "kakao-config.js에 JavaScript 키를 넣어주세요.");
+  const s = document.createElement("script");
+  s.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${encodeURIComponent(key)}&libraries=services&autoload=false`;
+  s.onload = () => { try { kakao.maps.load(initMap); } catch (e) { mapFail(e); } };
+  s.onerror = mapFail;
+  document.head.appendChild(s);
+}
+function mapFail(e) {
+  console.error(e);
+  showMapMsg("카카오맵을 불러오지 못했어요", "키가 맞는지, 카카오 개발자 사이트에 이 사이트 주소를 등록했는지 확인해 주세요.");
+}
+function initMap() {
+  const narrow = innerWidth < 600;
+  map = new kakao.maps.Map($("map"), { center: LL(...JEJU.center), level: narrow ? 11 : 10 });
+  map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+  kPlaces = new kakao.maps.services.Places();
+  geocoder = new kakao.maps.services.Geocoder();
+  kakao.maps.event.addListener(map, "click", (e) => {
+    if (!$("sheet").hidden) setDraftLoc(e.latLng.getLat(), e.latLng.getLng(), "", "", true);
+    else closeInfo();
+  });
+  renderMarkers();
+}
+function relayout() { if (map) map.relayout(); }
 
 function popupHtml(p) {
-  const q = encodeURIComponent(p.name);
   const link = safeUrl(p.link);
   return `<div class="pop"><strong>${esc(p.name)}</strong>
     <span class="meta">${CATS[p.cat].label} · ${esc(p.by)} 등록 · 가고 싶어요 ${(p.likes || []).length}</span>
     ${p.memo ? `<p>${esc(p.memo)}</p>` : ""}
     <div class="links">
-      <a class="pop-a" href="https://map.kakao.com/link/search/${q}" target="_blank" rel="noopener">카카오맵</a>
-      <a class="pop-a" href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">네이버지도</a>
-      ${link ? `<a class="pop-a" href="${esc(link)}" target="_blank" rel="noopener">참고 링크</a>` : ""}
+      <a href="${esc(kakaoLink(p))}" target="_blank" rel="noopener">카카오맵</a>
+      <a href="https://map.naver.com/p/search/${encodeURIComponent(p.name)}" target="_blank" rel="noopener">네이버지도</a>
+      ${link ? `<a href="${esc(link)}" target="_blank" rel="noopener">참고 링크</a>` : ""}
     </div></div>`;
 }
+function closeInfo() { if (infoOverlay) { infoOverlay.setMap(null); infoOverlay = null; } }
+function openInfo(p) {
+  closeInfo();
+  const wrap = document.createElement("div");
+  wrap.className = "info-wrap";
+  wrap.innerHTML = `<div class="info">${popupHtml(p)}<button type="button" class="info-x" aria-label="닫기">×</button></div>`;
+  wrap.querySelector(".info-x").onclick = closeInfo;
+  infoOverlay = new kakao.maps.CustomOverlay({ position: LL(p.lat, p.lng), content: wrap, yAnchor: 1, clickable: true, zIndex: 50 });
+  infoOverlay.setMap(map);
+}
+function pinEl(p, sel) {
+  const el = document.createElement("button");
+  el.type = "button";
+  el.className = `pin c-${p.cat}${sel ? " sel" : ""}`;
+  el.setAttribute("aria-label", p.name);
+  el.innerHTML = `<span>${CATS[p.cat].short}</span>`;
+  el.onclick = () => selectPlace(p.id, false);
+  return el;
+}
 function renderMarkers() {
+  if (!map) return;
   const visible = new Set(filtered().map((p) => p.id));
-  for (const [id, m] of markers) if (!visible.has(id)) { m.remove(); markers.delete(id); }
+  for (const [id, o] of markers) if (!visible.has(id)) { o.setMap(null); markers.delete(id); }
   for (const p of state.places) {
     if (!visible.has(p.id)) continue;
-    let m = markers.get(p.id);
-    if (!m) {
-      m = L.marker([p.lat, p.lng]).addTo(map);
-      m.on("click", () => selectPlace(p.id, false));
-      markers.set(p.id, m);
+    const sel = p.id === state.activeId;
+    let o = markers.get(p.id);
+    if (!o) {
+      o = new kakao.maps.CustomOverlay({ position: LL(p.lat, p.lng), content: pinEl(p, sel), yAnchor: 1.2, clickable: true, zIndex: sel ? 10 : 1 });
+      o.setMap(map);
+      markers.set(p.id, o);
+      continue;
     }
-    m.setLatLng([p.lat, p.lng]);
-    m.setIcon(pinIcon(p.cat, p.id === state.activeId));
-    m.setZIndexOffset(p.id === state.activeId ? 1000 : 0);
-    m.bindPopup(popupHtml(p), { maxWidth: 260 });
+    o.setPosition(LL(p.lat, p.lng));
+    o.setContent(pinEl(p, sel));
+    o.setZIndex(sel ? 10 : 1);
+  }
+  if (infoOverlay) {
+    const p = state.places.find((x) => x.id === state.activeId);
+    if (p && visible.has(p.id)) openInfo(p); else closeInfo();
   }
 }
 function selectPlace(id, fly) {
   state.activeId = id;
   const p = state.places.find((x) => x.id === id);
   renderList(); renderMarkers();
-  if (!p) return;
-  const m = markers.get(id);
+  if (!p || !map) return;
   if (fly) {
     if (matchMedia("(max-width: 820px)").matches) scrollTo({ top: 0, behavior: "smooth" });
-    map.flyTo([p.lat, p.lng], Math.max(map.getZoom(), 14), { duration: .6 });
+    if (map.getLevel() > 6) map.setLevel(6);
+    map.panTo(LL(p.lat, p.lng));
   }
-  if (m) m.openPopup();
+  openInfo(p);
   const li = document.querySelector(`.place[data-id="${CSS.escape(id)}"]`);
   if (li && !fly) li.scrollIntoView({ block: "nearest", behavior: "smooth" });
 }
-
-map.on("click", (e) => { if (!$("sheet").hidden) setDraftLoc(e.latlng.lat, e.latlng.lng, ""); });
 
 /* ───────── 목록 ───────── */
 function filtered() {
@@ -530,7 +578,7 @@ function renderList() {
       <div class="place-meta">
         <button type="button" class="like${liked ? " on" : ""}" data-act="like" title="${esc(likes.join(", ") || "아직 없음")}">♥ 가고 싶어요 ${likes.length}</button>
         <span>${esc(p.by)}</span>
-        <a href="https://map.kakao.com/link/search/${encodeURIComponent(p.name)}" target="_blank" rel="noopener">카카오맵</a>
+        <a href="${esc(kakaoLink(p))}" target="_blank" rel="noopener">카카오맵</a>
         ${link ? `<a href="${esc(link)}" target="_blank" rel="noopener">링크</a>` : ""}
         ${mine ? `<button type="button" class="textbtn" data-act="edit">수정</button><button type="button" class="textbtn danger" data-act="del">삭제</button>` : ""}
       </div>
@@ -555,20 +603,35 @@ $("list").addEventListener("click", (e) => {
 });
 
 /* ───────── 등록/수정 폼 ───────── */
-function setDraftLoc(lat, lng, addr) {
-  state.draftLoc = { lat, lng, addr: addr || "" };
-  if (!tempMarker) {
-    tempMarker = L.marker([lat, lng], { icon: tempIcon, draggable: true, zIndexOffset: 2000 }).addTo(map);
-    tempMarker.on("dragend", () => { const ll = tempMarker.getLatLng(); setDraftLoc(ll.lat, ll.lng, ""); });
-  } else tempMarker.setLatLng([lat, lng]);
-  const box = $("locBox");
-  box.classList.add("set");
-  box.textContent = state.draftLoc.addr
-    ? `📍 ${state.draftLoc.addr}`
-    : `📍 지도에서 찍은 위치 (${lat.toFixed(5)}, ${lng.toFixed(5)})`;
+function locText() {
+  const d = state.draftLoc;
+  return d.addr ? `📍 ${d.addr}` : `📍 지도에서 찍은 위치 (${d.lat.toFixed(5)}, ${d.lng.toFixed(5)})`;
+}
+function setDraftLoc(lat, lng, addr, url, lookup) {
+  state.draftLoc = { lat, lng, addr: addr || "", url: url || "" };
+  if (map) {
+    if (!tempOverlay) {
+      const el = document.createElement("div");
+      el.className = "pin temp";
+      el.innerHTML = "<span>＋</span>";
+      tempOverlay = new kakao.maps.CustomOverlay({ position: LL(lat, lng), content: el, yAnchor: 1.2, zIndex: 40 });
+      tempOverlay.setMap(map);
+    } else tempOverlay.setPosition(LL(lat, lng));
+  }
+  $("locBox").classList.add("set");
+  $("locBox").textContent = locText();
+  if (lookup && geocoder) {
+    const mine = state.draftLoc;
+    geocoder.coord2Address(lng, lat, (res, status) => {
+      if (status !== kakao.maps.services.Status.OK || state.draftLoc !== mine || !res[0]) return;
+      mine.addr = (res[0].road_address && res[0].road_address.address_name) || (res[0].address && res[0].address.address_name) || "";
+      $("locBox").textContent = locText();
+    });
+  }
 }
 function openSheet(p) {
   if (!state.me) return openWho();
+  closeInfo();
   state.editingId = p ? p.id : null;
   $("sheetTitle").textContent = p ? "장소 수정" : "장소 추가";
   $("sheetSave").textContent = p ? "저장" : "등록";
@@ -578,57 +641,54 @@ function openSheet(p) {
   $("fLink").value = p ? p.link || "" : "";
   $("fSearch").value = ""; $("results").hidden = true; $("formErr").hidden = true;
   state.draftLoc = null; $("locBox").classList.remove("set"); $("locBox").textContent = "위치를 아직 정하지 않았어요";
-  if (p) { setDraftLoc(p.lat, p.lng, p.addr); map.setView([p.lat, p.lng], Math.max(map.getZoom(), 13)); }
+  if (p) {
+    setDraftLoc(p.lat, p.lng, p.addr, p.kakaoUrl, false);
+    if (map) { if (map.getLevel() > 6) map.setLevel(6); map.setCenter(LL(p.lat, p.lng)); }
+  }
   $("sheet").hidden = false; $("addBtn").hidden = true;
-  document.body.classList.add("picking");
+  if (map) map.setCursor("crosshair");
   if (matchMedia("(max-width: 820px)").matches) scrollTo({ top: 0, behavior: "smooth" });
   else $("fName").focus();
 }
 function closeSheet() {
   $("sheet").hidden = true; $("addBtn").hidden = false;
-  document.body.classList.remove("picking");
-  if (tempMarker) { tempMarker.remove(); tempMarker = null; }
+  if (map) map.setCursor("");
+  if (tempOverlay) { tempOverlay.setMap(null); tempOverlay = null; }
   state.editingId = null; state.draftLoc = null;
 }
 $("addBtn").onclick = () => openSheet(null);
 $("sheetClose").onclick = closeSheet;
 $("sheetCancel").onclick = closeSheet;
 
-let lastSearch = 0;
-async function search() {
+function search() {
   const q = $("fSearch").value.trim() || $("fName").value.trim();
   if (!q) return;
-  if (Date.now() - lastSearch < 1100) return;  // OpenStreetMap 검색은 초당 1회 제한
-  lastSearch = Date.now();
   const r = $("results");
-  r.hidden = false; r.innerHTML = `<li><button type="button" disabled>검색 중…</button></li>`;
-  try {
-    const url = "https://nominatim.openstreetmap.org/search?" + new URLSearchParams({
-      q, format: "jsonv2", limit: "6", countrycodes: "kr", "accept-language": "ko",
-      viewbox: "126.10,33.62,127.00,33.10", bounded: "1",
-    });
-    const res = await fetch(url);
-    const data = await res.json();
-    if (!data.length) { r.innerHTML = `<li><button type="button" disabled>검색 결과가 없어요. 지도를 눌러 직접 찍어주세요.</button></li>`; return; }
+  const msg = (t) => { r.hidden = false; r.innerHTML = `<li><button type="button" disabled>${esc(t)}</button></li>`; };
+  if (!kPlaces) return msg("지도가 아직 준비되지 않았어요. 잠시 후 다시 검색해 주세요.");
+  msg("검색 중…");
+  const bounds = new kakao.maps.LatLngBounds(LL(...JEJU.sw), LL(...JEJU.ne));
+  kPlaces.keywordSearch(q, (data, status) => {
+    const S = kakao.maps.services.Status;
+    if (status === S.ZERO_RESULT) return msg("제주에서 찾은 결과가 없어요. 지도를 눌러 직접 찍어주세요.");
+    if (status !== S.OK) return msg("검색에 실패했어요. 지도를 눌러 위치를 찍어주세요.");
     r.innerHTML = data.map((d, i) => {
-      const parts = d.display_name.split(",").map((s) => s.trim());
-      const title = d.name || parts[0];
-      const addr = parts.slice(0, -2).reverse().slice(0, 4).join(" ");
-      return `<li><button type="button" data-i="${i}">${esc(title)}<small>${esc(addr)}</small></button></li>`;
+      const kind = (d.category_name || "").split(">").pop().trim();
+      const addr = d.road_address_name || d.address_name;
+      return `<li><button type="button" data-i="${i}">${esc(d.place_name)}<small>${esc([kind, addr].filter(Boolean).join(" · "))}</small></button></li>`;
     }).join("");
     r.onclick = (e) => {
       const b = e.target.closest("button[data-i]"); if (!b) return;
       const d = data[+b.dataset.i];
-      const parts = d.display_name.split(",").map((s) => s.trim());
-      const addr = parts.slice(0, -2).reverse().slice(0, 4).join(" ");
-      setDraftLoc(+d.lat, +d.lon, addr);
-      if (!$("fName").value.trim()) $("fName").value = d.name || parts[0];
-      map.setView([+d.lat, +d.lon], 15);
+      const lat = +d.y, lng = +d.x;
+      setDraftLoc(lat, lng, d.road_address_name || d.address_name, d.place_url, false);
+      if (!$("fName").value.trim() || !state.editingId) $("fName").value = d.place_name;
+      const cat = KAKAO_CAT[d.category_group_code];
+      if (cat) $({ food: "catFood", cafe: "catCafe", fun: "catFun" }[cat]).checked = true;
+      if (map) { if (map.getLevel() > 5) map.setLevel(5); map.setCenter(LL(lat, lng)); }
       r.hidden = true;
     };
-  } catch (err) {
-    r.innerHTML = `<li><button type="button" disabled>검색에 실패했어요. 지도를 눌러 위치를 찍어주세요.</button></li>`;
-  }
+  }, { bounds, size: 8 });
 }
 $("searchBtn").onclick = search;
 $("fSearch").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); search(); } });
@@ -644,7 +704,7 @@ $("sheet").addEventListener("submit", (e) => {
   const data = {
     cat: document.querySelector('input[name="cat"]:checked').value,
     name, memo: $("fMemo").value.trim(), link,
-    lat: state.draftLoc.lat, lng: state.draftLoc.lng, addr: state.draftLoc.addr || "",
+    lat: state.draftLoc.lat, lng: state.draftLoc.lng, addr: state.draftLoc.addr || "", kakaoUrl: state.draftLoc.url || "",
   };
   const btn = $("sheetSave"); btn.disabled = true;
   const job = state.editingId ? Store.updatePlace(state.editingId, data) : Store.addPlace({ ...data, by: state.me });
@@ -744,7 +804,7 @@ function renderFlightForm(f) {
 
 /* ───────── 시작 ───────── */
 function renderAll() { renderFilters(); renderList(); renderMarkers(); }
-renderMe(); fitChrome(); renderAll(); renderFlights();
+renderMe(); fitChrome(); renderAll(); renderFlights(); loadKakao();
 if (!state.me) openWho();
 const loadErr = (e) => { console.error(e); toast("데이터를 불러오지 못했어요. 새로고침해 주세요."); };
 Store.onPlaces((list) => {
