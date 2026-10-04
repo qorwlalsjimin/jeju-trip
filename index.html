@@ -2,15 +2,16 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
 <title>우리들의 제주</title>
 <meta name="description" content="8명이 함께 고르는 제주 식당·카페·놀거리, 그리고 항공편 일정">
 
+<!-- 카카오톡 링크 미리보기(썸네일). 배포 후 아래 두 줄의 주소를 실제 사이트 주소로 바꿔주세요. -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="우리들의 제주 ✈ 8명 여행 플래너">
 <meta property="og:description" content="가고 싶은 식당·카페·놀거리를 지도에 찍어주세요">
-<meta property="og:image" content="https://qorwlalsjimin.github.io/jeju-trip/og-image.png">
-<meta property="og:url" content="https://qorwlalsjimin.github.io/jeju-trip/">
+<meta property="og:image" content="https://YOUR-GITHUB-ID.github.io/jeju-trip/og-image.png">
+<meta property="og:url" content="https://YOUR-GITHUB-ID.github.io/jeju-trip/">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="theme-color" content="#E8742A">
@@ -72,8 +73,11 @@ a{color:inherit}
 .banner{margin:0;padding:8px 16px;font-size:13px;background:var(--accent-soft);color:var(--ink)}
 
 /* ── map view ── */
-.map-view{display:grid;grid-template-columns:minmax(0,1fr) 400px;height:calc(100dvh - var(--chrome, 120px))}
-#map{height:100%;min-height:300px;background:var(--sunken)}
+.map-view{display:grid;grid-template-columns:minmax(0,1fr) 400px;height:calc(var(--screen-h, 100vh) - var(--chrome, 120px))}
+.map-wrap{position:relative;height:100%;min-height:300px}
+#map{height:100%;background:var(--sunken)}
+.home-btn{position:absolute;top:10px;left:10px;z-index:5;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.home-btn svg{width:14px;height:14px;flex:none}
 .side{display:flex;flex-direction:column;min-width:0;border-left:1px solid var(--line);background:var(--surface);overflow:hidden;position:relative}
 .side-head{padding:14px 16px 10px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
 .filters{display:flex;gap:6px;flex-wrap:wrap}
@@ -83,7 +87,7 @@ a{color:inherit}
 .fchip[aria-pressed="true"] .n{color:inherit;opacity:.7}
 .fchip .sw{width:8px;height:8px;border-radius:50%}
 .side-tools{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.sort{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 8px;font-size:13px}
+.sort{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 8px;font-size:16px}
 .btn{border:0;border-radius:10px;padding:9px 14px;font-weight:600;background:var(--sunken)}
 .btn.primary{background:var(--accent);color:var(--accent-ink)}
 .btn.ghost{background:none;border:1px solid var(--line)}
@@ -117,7 +121,7 @@ a{color:inherit}
 .sheet-foot{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;padding-bottom:max(12px, env(safe-area-inset-bottom));border-top:1px solid var(--line)}
 .field{display:flex;flex-direction:column;gap:6px}
 .field>label,.field>.lbl{font-size:13px;font-weight:600;color:var(--muted)}
-.input{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--bg)}
+.input{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--bg);font-size:16px}
 textarea.input{min-height:72px;resize:vertical}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .seg label{position:relative}
@@ -202,11 +206,11 @@ textarea.input{min-height:72px;resize:vertical}
 /* ── mobile ── */
 @media (max-width: 820px){
   .map-view{display:block;height:auto}
-  #map{height:46vh;position:sticky;top:0;z-index:1}
+  .map-wrap{height:calc(var(--screen-h, 100vh) * .46);min-height:240px;position:sticky;top:0;z-index:1}
   .side{border-left:0;overflow:visible}
   .list{overflow:visible;padding-bottom:96px}
   .fab{position:fixed;bottom:max(16px, env(safe-area-inset-bottom))}
-  .sheet{position:fixed;top:auto;max-height:58vh;border-radius:18px 18px 0 0;box-shadow:var(--shadow)}
+  .sheet{position:fixed;top:auto;max-height:calc(var(--screen-h, 100vh) * .58);border-radius:18px 18px 0 0;box-shadow:var(--shadow)}
   .brand h1{font-size:21px}
   .top-right{margin-left:0;width:100%}
 }
@@ -232,7 +236,10 @@ textarea.input{min-height:72px;resize:vertical}
 
 <main>
   <section class="map-view" id="viewMap">
-    <div id="map" aria-label="제주 지도"></div>
+    <div class="map-wrap">
+      <div id="map" aria-label="제주 지도"></div>
+      <button type="button" class="home-btn" id="homeBtn" aria-label="제주 전체 보기"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7.2 8 2.5l6 4.7"/><path d="M3.8 6v7.2h8.4V6"/></svg>제주 전체</button>
+    </div>
     <aside class="side">
       <div class="side-head">
         <div class="filters" id="filters"></div>
@@ -425,11 +432,20 @@ function setTab(which) {
 $("tabMap").onclick = () => setTab("map");
 $("tabFlights").onclick = () => setTab("flights");
 $("flightChip").onclick = () => setTab("flights");
+function setScreenH() { document.documentElement.style.setProperty("--screen-h", innerHeight + "px"); }
+const touch = matchMedia("(pointer: coarse)").matches;
+setScreenH();
+let lastW = innerWidth;
+addEventListener("orientationchange", () => setTimeout(() => { setScreenH(); relayout(); }, 300));
 function fitChrome() {
   const h = $("top").offsetHeight + document.querySelector(".tabs").offsetHeight + ($("demoBanner").hidden ? 0 : $("demoBanner").offsetHeight);
   document.documentElement.style.setProperty("--chrome", h + "px");
 }
-addEventListener("resize", () => { fitChrome(); relayout(); });
+addEventListener("resize", () => {
+  // 키보드가 열릴 때(높이만 변함)는 무시하고, 폭이 바뀔 때만 다시 계산
+  if (!touch || innerWidth !== lastW) { lastW = innerWidth; setScreenH(); }
+  fitChrome(); relayout();
+});
 
 /* ───────── 지도 (카카오맵) ───────── */
 let map = null, kPlaces = null, geocoder = null, infoOverlay = null, tempOverlay = null;
@@ -455,7 +471,8 @@ function mapFail(e) {
 }
 function initMap() {
   const narrow = innerWidth < 600;
-  map = new kakao.maps.Map($("map"), { center: LL(...JEJU.center), level: narrow ? 11 : 10 });
+  JEJU.level = narrow ? 11 : 10;
+  map = new kakao.maps.Map($("map"), { center: LL(...JEJU.center), level: JEJU.level });
   map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
   kPlaces = new kakao.maps.services.Places();
   geocoder = new kakao.maps.services.Geocoder();
@@ -466,6 +483,13 @@ function initMap() {
   renderMarkers();
 }
 function relayout() { if (map) map.relayout(); }
+function goHome() {
+  if (!map) return;
+  closeInfo();
+  map.setLevel(JEJU.level);
+  map.setCenter(LL(...JEJU.center));
+}
+$("homeBtn").onclick = goHome;
 
 function popupHtml(p) {
   const link = safeUrl(p.link);
