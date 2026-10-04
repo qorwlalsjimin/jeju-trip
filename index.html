@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
 <title>겨울이 머문 제주</title>
-<meta name="description" content="제주 식당·카페·유원지, 여행 계획">
+<meta name="description" content="제주 식당·카페·놀거리, 여행 일정">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="제주 여행 플래너">
-<meta property="og:description" content="가고 싶은 식당·카페·유원지를 지도에 찍어주세요">
+<meta property="og:title" content="겨울이 머문 제주 . . . ✈ 여행 플래너">
+<meta property="og:description" content="가고 싶은 식당·카페·놀거리를 업로드해주세요">
 <meta property="og:image" content="https://qorwlalsjimin.github.io/jeju-trip/og-image.png">
-<meta property="og:url" content="https://qorwlalsjimin.github.io.github.io/jeju-trip/">
+<meta property="og:url" content="https://qorwlalsjimin.github.io/jeju-trip/">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta name="theme-color" content="#E8742A">
+<meta name="theme-color" content="#FFB591">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,23 +23,27 @@
 <style>
 /* Layout: 지도가 주인공 — 데스크톱은 지도 | 목록 2단, 모바일은 지도 위·목록 아래. 항공권은 탑승권 카드. */
 :root{
-  --bg:#F2F6F5; --surface:#FFFFFF; --sunken:#E7EEEC;
-  --ink:#1C2321; --muted:#5D6A67; --line:#D6E0DD;
-  --accent:#E8742A; --accent-ink:#FFFFFF; --accent-soft:#FCE7D8;
-  --food:#E8742A; --cafe:#8A5B3B; --fun:#1C8A84;
-  --danger:#C2402E;
-  --shadow:0 8px 28px rgba(28,35,33,.14);
+  --bg:#FBF7F3; --surface:#FFFFFF; --sunken:#F4EEF1;
+  --ink:#45404D; --muted:#8E8796; --line:#EFE7EC;
+  --accent:#FFB591; --accent-ink:#5C2E16; --accent-soft:#FFEDE2; --accent-strong:#D96B34;
+  --food:#FFB591; --food-ink:#6B3A22;
+  --cafe:#F9CCDA; --cafe-ink:#8A3A55;
+  --fun:#BFE6E0;  --fun-ink:#2A6460;
+  --danger:#D9675A;
+  --shadow:0 8px 28px rgba(69,64,77,.12);
   --f-display:"Gowun Batang", "Noto Serif KR", serif;
   --f-body:"Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --r:12px;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#121715; --surface:#1B2220; --sunken:#232C29;
-    --ink:#E8EEEC; --muted:#98A6A2; --line:#2D3834;
-    --accent:#F08A45; --accent-ink:#1B1208; --accent-soft:#3A2618;
-    --food:#F08A45; --cafe:#C28E66; --fun:#3BB4AC;
-    --danger:#EB6A55;
+    --bg:#1F1C24; --surface:#28242E; --sunken:#312C38;
+    --ink:#F2EDF4; --muted:#A8A1B0; --line:#3A3442;
+    --accent:#FFB591; --accent-ink:#4A2412; --accent-soft:#45302A; --accent-strong:#FFB591;
+    --food:#FFB591; --food-ink:#5A2C14;
+    --cafe:#F4BFD0; --cafe-ink:#6E2A42;
+    --fun:#A9DCD4;  --fun-ink:#1F4E4A;
+    --danger:#F09A8F;
     --shadow:0 8px 28px rgba(0,0,0,.45);
     color-scheme:dark;
   }
@@ -57,11 +61,11 @@ a{color:inherit}
 .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px 10px;padding-top:max(14px, env(safe-area-inset-top));background:var(--surface);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:baseline;gap:10px;min-width:0}
 .brand h1{font-family:var(--f-display);font-size:24px;margin:0;letter-spacing:-.01em;white-space:nowrap}
-.brand h1 i{font-style:normal;color:var(--accent)}
+.brand h1 i{font-style:normal;color:var(--accent-strong)}
 .brand small{color:var(--muted);font-size:13px;white-space:nowrap}
 .top-right{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .flight-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--sunken);font-size:13px;border:0;font-variant-numeric:tabular-nums}
-.flight-chip b{color:var(--accent)}
+.flight-chip b{color:var(--accent-strong)}
 .me-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px 6px 6px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13px}
 .avatar{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700}
 
@@ -95,15 +99,15 @@ a{color:inherit}
 .list{list-style:none;margin:0;padding:6px 0 90px;overflow:auto;flex:1}
 .place{padding:12px 16px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:32px minmax(0,1fr);gap:4px 12px}
 .place.active{background:var(--sunken)}
-.dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;grid-row:span 2}
-.c-food{background:var(--food)} .c-cafe{background:var(--cafe)} .c-fun{background:var(--fun)}
+.dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;grid-row:span 2}
+.c-food{background:var(--food);color:var(--food-ink)} .c-cafe{background:var(--cafe);color:var(--cafe-ink)} .c-fun{background:var(--fun);color:var(--fun-ink)}
 .place-main{border:0;background:none;padding:0;text-align:left;min-width:0}
 .place-main strong{display:block;font-size:15px}
 .place-main .addr{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .place-main .memo{margin:4px 0 0;font-size:13.5px;white-space:pre-wrap;overflow-wrap:anywhere}
 .place-meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12.5px;color:var(--muted)}
 .like{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 10px;font-size:12.5px;font-variant-numeric:tabular-nums}
-.like.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.like.on{border-color:var(--accent);color:var(--accent-strong);background:var(--accent-soft)}
 .textbtn{border:0;background:none;padding:0;font-size:12.5px;color:var(--muted);text-decoration:underline;text-underline-offset:2px}
 .textbtn.danger{color:var(--danger)}
 .place-meta a{text-underline-offset:2px}
@@ -126,9 +130,10 @@ textarea.input{min-height:72px;resize:vertical}
 .seg label{position:relative}
 .seg input{position:absolute;opacity:0}
 .seg span{display:flex;justify-content:center;align-items:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:9px;font-weight:600}
-.seg input:checked+span{border-color:currentColor}
+.seg span{color:var(--muted)}
+.seg input:checked+span{background:var(--c);border-color:var(--c);color:var(--ci)}
 .seg input:focus-visible+span{outline:2px solid var(--accent)}
-.seg .food{color:var(--food)} .seg .cafe{color:var(--cafe)} .seg .fun{color:var(--fun)}
+.seg .food{--c:var(--food);--ci:var(--food-ink)} .seg .cafe{--c:var(--cafe);--ci:var(--cafe-ink)} .seg .fun{--c:var(--fun);--ci:var(--fun-ink)}
 .row{display:flex;gap:6px}
 .row .input{flex:1;min-width:0}
 .results{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
@@ -142,9 +147,9 @@ textarea.input{min-height:72px;resize:vertical}
 .err{color:var(--danger);font-size:13px;margin:0}
 
 /* ── map pins ── */
-.pin{padding:0;cursor:pointer;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
-.pin span{transform:rotate(45deg);color:#fff;font:700 12px var(--f-body)}
-.pin.temp{background:var(--ink);animation:bob .9s ease-in-out infinite alternate}
+.pin{padding:0;cursor:pointer;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(40,30,50,.38)}
+.pin span{transform:rotate(45deg);color:inherit;font:700 12px var(--f-body)}
+.pin.temp{background:var(--ink);color:var(--bg);animation:bob .9s ease-in-out infinite alternate}
 .pin.sel{outline:3px solid var(--ink);outline-offset:1px}
 @keyframes bob{to{translate:0 -4px}}
 @media (prefers-reduced-motion: reduce){.pin.temp{animation:none}}
@@ -156,7 +161,7 @@ textarea.input{min-height:72px;resize:vertical}
 .pop .meta{color:var(--muted);font-size:12px}
 .pop p{margin:6px 0;white-space:pre-wrap;font-size:13px}
 .pop .links{display:flex;gap:10px;font-size:12.5px;margin-top:6px}
-.pop .links a{color:var(--accent);text-underline-offset:2px}
+.pop .links a{color:var(--accent-strong);text-underline-offset:2px}
 .map-msg{height:100%;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:14px}
 .map-msg b{display:block;color:var(--ink);margin-bottom:4px}
 
@@ -167,14 +172,14 @@ textarea.input{min-height:72px;resize:vertical}
 .flights-head p{margin:2px 0 0;color:var(--muted);font-size:14px}
 .passes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px}
 .pass{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.pass-top{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:var(--ink);color:var(--bg);font-size:13px;letter-spacing:.04em}
+.pass-top{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:var(--accent-soft);color:var(--ink);font-size:13px;letter-spacing:.04em}
 .pass-top b{font-size:14px;letter-spacing:.06em}
 .pass-route{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:20px 18px 14px}
 .port{min-width:0}
 .port .city{font-family:var(--f-display);font-size:28px;line-height:1.1;display:block}
 .port time{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
 .port.to{text-align:right}
-.plane{color:var(--accent);font-size:20px}
+.plane{color:var(--accent-strong);font-size:20px}
 .pass-cut{border-top:2px dashed var(--line);margin:0 14px;position:relative}
 .pass-cut::before,.pass-cut::after{content:"";position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
 .pass-cut::before{left:-25px}.pass-cut::after{right:-25px}
@@ -219,7 +224,7 @@ textarea.input{min-height:72px;resize:vertical}
 
 <header class="top" id="top">
   <div class="brand">
-    <h1>우리들의 <i>제주</i></h1>
+    <h1>겨울이 머문 <i>제주</i></h1>
     <small id="summary">8명 · 장소 0곳</small>
   </div>
   <div class="top-right">
@@ -782,7 +787,7 @@ function renderFlights() {
   const stay = stayText(f), dd = f.out && dday(f.out.date);
   $("flights").innerHTML = `
     <div class="flights-head">
-      <div><h2>항공권</h2><p>8명 모두 같은 항공편이에요.</p></div>
+      <div><h2>항공권</h2><p>모두 같은 항공편이에요.</p></div>
       <button class="btn primary" type="button" id="editFlights">${f.out ? "항공편 수정" : "항공편 입력"}</button>
     </div>
     ${(stay || dd) ? `<div class="stay">
