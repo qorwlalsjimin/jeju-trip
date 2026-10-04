@@ -6,6 +6,7 @@
 <title>겨울이 머문 제주</title>
 <meta name="description" content="제주 식당·카페·놀거리, 여행 일정">
 
+<!-- 카카오톡 링크 미리보기(썸네일) -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="겨울이 머문 제주 . . . ✈ 여행 플래너">
 <meta property="og:description" content="가고 싶은 식당·카페·놀거리를 업로드해주세요">
@@ -26,9 +27,10 @@
   --bg:#FBF7F3; --surface:#FFFFFF; --sunken:#F4EEF1;
   --ink:#45404D; --muted:#8E8796; --line:#EFE7EC;
   --accent:#FFB591; --accent-ink:#5C2E16; --accent-soft:#FFEDE2; --accent-strong:#D96B34;
-  --food:#FFB591; --food-ink:#6B3A22;
-  --cafe:#F9CCDA; --cafe-ink:#8A3A55;
+  --food:#F9CCDA; --food-ink:#8A3A55;
+  --cafe:#A8FFFA; --cafe-ink:#16625E;
   --fun:#BFE6E0;  --fun-ink:#2A6460;
+  --stay:#DCD0F7; --stay-ink:#4A3B7A; --stay-soft:#F1ECFC;
   --danger:#D9675A;
   --shadow:0 8px 28px rgba(69,64,77,.12);
   --f-display:"Gowun Batang", "Noto Serif KR", serif;
@@ -40,9 +42,10 @@
     --bg:#1F1C24; --surface:#28242E; --sunken:#312C38;
     --ink:#F2EDF4; --muted:#A8A1B0; --line:#3A3442;
     --accent:#FFB591; --accent-ink:#4A2412; --accent-soft:#45302A; --accent-strong:#FFB591;
-    --food:#FFB591; --food-ink:#5A2C14;
-    --cafe:#F4BFD0; --cafe-ink:#6E2A42;
+    --food:#F4BFD0; --food-ink:#6E2A42;
+    --cafe:#A8FFFA; --cafe-ink:#12514E;
     --fun:#A9DCD4;  --fun-ink:#1F4E4A;
+    --stay:#CFC2F2; --stay-ink:#3B2F66; --stay-soft:#2F2A40;
     --danger:#F09A8F;
     --shadow:0 8px 28px rgba(0,0,0,.45);
     color-scheme:dark;
@@ -100,7 +103,7 @@ a{color:inherit}
 .place{padding:12px 16px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:32px minmax(0,1fr);gap:4px 12px}
 .place.active{background:var(--sunken)}
 .dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;grid-row:span 2}
-.c-food{background:var(--food);color:var(--food-ink)} .c-cafe{background:var(--cafe);color:var(--cafe-ink)} .c-fun{background:var(--fun);color:var(--fun-ink)}
+.c-food{background:var(--food);color:var(--food-ink)} .c-cafe{background:var(--cafe);color:var(--cafe-ink)} .c-fun{background:var(--fun);color:var(--fun-ink)} .c-stay{background:var(--stay);color:var(--stay-ink)}
 .place-main{border:0;background:none;padding:0;text-align:left;min-width:0}
 .place-main strong{display:block;font-size:15px}
 .place-main .addr{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -196,6 +199,80 @@ textarea.input{min-height:72px;resize:vertical}
 .fform legend{font-weight:700;margin-bottom:8px;font-size:15px}
 .fform-foot{display:flex;justify-content:flex-end;gap:8px}
 
+/* ── tabs: 4개라 좁은 화면에서 가로 스크롤 ── */
+.tabs{overflow-x:auto;scrollbar-width:none}
+.tab{white-space:nowrap}
+
+/* ── stay ── */
+.stay-wrap{max-width:720px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:20px}
+.stay-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.stay-top{display:flex;align-items:center;gap:12px;padding:16px 18px;background:var(--stay-soft)}
+.stay-top .dot{grid-row:auto}
+.stay-top h3{margin:0;font-family:var(--f-display);font-size:24px;line-height:1.2}
+.stay-top small{display:block;color:var(--muted);font-size:13px}
+.stay-times{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;padding:18px}
+.stay-times div{display:flex;flex-direction:column;min-width:0}
+.stay-times small{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.stay-times b{font-size:17px;font-variant-numeric:tabular-nums}
+.stay-times .to{text-align:right}
+.nights{padding:4px 12px;border-radius:999px;background:var(--stay);color:var(--stay-ink);font-size:13px;font-weight:700;white-space:nowrap}
+.stay-foot{display:flex;flex-wrap:wrap;gap:8px 14px;padding:12px 18px 16px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--muted)}
+.stay-foot a{color:var(--accent-strong);text-underline-offset:2px}
+.stay-memo{margin:0;padding:0 18px 16px;white-space:pre-wrap;font-size:14px}
+
+/* ── plan ── */
+.plan-wrap{max-width:880px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:14px}
+.day-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.day-tab{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 14px;text-align:left;white-space:nowrap;flex:none}
+.day-tab b{display:block;font-size:14px}
+.day-tab small{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.day-tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.day-tab[aria-pressed="true"] small{color:inherit;opacity:.75}
+.timeline{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.tl-times{border-right:1px solid var(--line)}
+.tl-time{height:var(--row);font-size:12px;color:var(--muted);text-align:right;padding:4px 8px 0 0;font-variant-numeric:tabular-nums;box-sizing:border-box}
+.tl-time.half{color:transparent}
+.tl-body{position:relative}
+.tl-slot{display:block;width:100%;height:var(--row);border:0;border-top:1px solid var(--line);background:none;text-align:left;padding:0 10px;color:transparent;font-size:12.5px}
+.tl-slot:first-child{border-top:0}
+.tl-slot.hour{border-top-color:var(--line)}
+.tl-slot.half{border-top-style:dashed}
+.tl-slot:hover,.tl-slot:focus-visible{background:var(--sunken);color:var(--muted)}
+.tl-item{position:absolute;box-sizing:border-box;border-radius:10px;padding:6px 10px;border:0;text-align:left;overflow:hidden;display:flex;flex-direction:column;gap:1px;font-size:13px;line-height:1.3;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.tl-item b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-item small{font-size:11.5px;opacity:.85;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tl-item.c-free{background:var(--sunken);color:var(--ink)}
+.tl-item.fixed{flex-direction:row;align-items:center;gap:8px;padding:0 10px;background:repeating-linear-gradient(135deg,var(--surface),var(--surface) 6px,var(--sunken) 6px,var(--sunken) 12px);color:var(--ink);border:1px dashed var(--muted);cursor:default}
+.plan-empty{background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:40px 24px;text-align:center;color:var(--muted)}
+.plan-empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:6px}
+.plan-empty .btn{margin-top:14px}
+
+/* ── modal ── */
+.modal{position:fixed;inset:0;z-index:1500;background:rgba(31,28,36,.45);display:grid;place-items:center;padding:16px}
+.modal-card{background:var(--surface);border-radius:18px;width:100%;max-width:460px;max-height:calc(var(--screen-h, 100vh) - 32px);display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.modal-card .sheet-body{flex:1;min-height:0}
+.pick-list{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:12px;max-height:240px;overflow:auto}
+.pick-list li+li{border-top:1px solid var(--line)}
+.pick-list label{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer}
+.pick-list input{accent-color:var(--accent-strong)}
+.pick-list .dot{width:26px;height:26px;font-size:11.5px;flex:none}
+.pick-list span.t{min-width:0}
+.pick-list span.t b{display:block;font-size:14px;font-weight:600}
+.pick-list span.t small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pick-list .none{padding:16px;color:var(--muted);font-size:13.5px;text-align:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg2 label{position:relative}
+.seg2 input{position:absolute;opacity:0}
+.seg2 span{display:flex;justify-content:center;border:1px solid var(--line);border-radius:10px;padding:8px;font-weight:600;color:var(--muted)}
+.seg2 input:checked+span{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.seg2 input:focus-visible+span{outline:2px solid var(--accent)}
+.btn.danger{background:none;border:1px solid var(--line);color:var(--danger);margin-right:auto}
+@media (max-width: 820px){
+  .modal{place-items:end center;padding:0}
+  .modal-card{max-width:none;border-radius:18px 18px 0 0;max-height:calc(var(--screen-h, 100vh) * .85)}
+}
+
 /* ── who-are-you ── */
 .who{position:fixed;inset:0;z-index:2000;background:rgba(18,23,21,.55);display:grid;place-items:center;padding:16px}
 .who-card{background:var(--surface);border-radius:20px;padding:24px;max-width:420px;width:100%;box-shadow:var(--shadow)}
@@ -234,6 +311,8 @@ textarea.input{min-height:72px;resize:vertical}
 </header>
 <nav class="tabs" role="tablist">
   <button class="tab" role="tab" id="tabMap" aria-selected="true" type="button">지도 · 장소</button>
+  <button class="tab" role="tab" id="tabPlan" aria-selected="false" type="button">계획표</button>
+  <button class="tab" role="tab" id="tabStay" aria-selected="false" type="button">숙소</button>
   <button class="tab" role="tab" id="tabFlights" aria-selected="false" type="button">항공권</button>
 </nav>
 <p class="banner" id="demoBanner" hidden>미리보기 모드: Firebase가 아직 연결되지 않아 등록한 내용이 이 기기에만 저장됩니다.</p>
@@ -304,6 +383,14 @@ textarea.input{min-height:72px;resize:vertical}
     </aside>
   </section>
 
+  <section id="viewPlan" hidden>
+    <div class="plan-wrap" id="plan"></div>
+  </section>
+
+  <section id="viewStay" hidden>
+    <div class="stay-wrap" id="stayView"></div>
+  </section>
+
   <section id="viewFlights" hidden>
     <div class="flights" id="flights"></div>
   </section>
@@ -316,6 +403,7 @@ textarea.input{min-height:72px;resize:vertical}
     <div class="who-grid" id="whoGrid"></div>
   </div>
 </div>
+<div class="modal" id="modal" hidden></div>
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -365,10 +453,21 @@ function firebaseStore(cfg) {
       ready.then(() => flights.onSnapshot((d) => cb(d.exists ? d.data() : null), onErr)).catch(onErr);
     },
     saveFlights: (data) => ready.then(() => flights.set(data)),
+    onStay(cb, onErr) {
+      ready.then(() => db.collection("trip").doc("stay").onSnapshot((d) => cb(d.exists ? d.data() : null), onErr)).catch(onErr);
+    },
+    saveStay: (data) => ready.then(() => db.collection("trip").doc("stay").set(data)),
+    onPlans(cb, onErr) {
+      ready.then(() => db.collection("plans").onSnapshot((s) => cb(s.docs.map((d) => ({ id: d.id, ...d.data() }))), onErr)).catch(onErr);
+    },
+    addPlan: (p) => ready.then(() => db.collection("plans").add({ ...p, createdAt: Date.now() })),
+    updatePlan: (id, patch) => ready.then(() => db.collection("plans").doc(id).update(patch)),
+    deletePlan: (id) => ready.then(() => db.collection("plans").doc(id).delete()),
   };
 }
 function localStore() {
-  const subs = { places: [], flights: [] };
+  const subs = { places: [], flights: [], stay: [], plans: [] };
+  const mutPlans = (fn) => { const l = ls.get("jeju.plans", []); fn(l); ls.set("jeju.plans", l); subs.plans.forEach((f) => f(l)); return Promise.resolve(); };
   const emitP = () => { const list = ls.get("jeju.places", []).sort((a, b) => b.createdAt - a.createdAt); subs.places.forEach((f) => f(list)); };
   const emitF = () => subs.flights.forEach((f) => f(ls.get("jeju.flights", null)));
   const mut = (fn) => { const list = ls.get("jeju.places", []); fn(list); ls.set("jeju.places", list); emitP(); return Promise.resolve(); };
@@ -385,6 +484,12 @@ function localStore() {
     }),
     onFlights(cb) { subs.flights.push(cb); emitF(); },
     saveFlights: (data) => { ls.set("jeju.flights", data); emitF(); return Promise.resolve(); },
+    onStay(cb) { subs.stay.push(cb); cb(ls.get("jeju.stay", null)); },
+    saveStay: (data) => { ls.set("jeju.stay", data); subs.stay.forEach((f) => f(data)); return Promise.resolve(); },
+    onPlans(cb) { subs.plans.push(cb); cb(ls.get("jeju.plans", [])); },
+    addPlan: (p) => mutPlans((l) => l.push({ ...p, id: "q" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), createdAt: Date.now() })),
+    updatePlan: (id, patch) => mutPlans((l) => { const p = l.find((x) => x.id === id); if (p) Object.assign(p, patch); }),
+    deletePlan: (id) => mutPlans((l) => { const i = l.findIndex((x) => x.id === id); if (i > -1) l.splice(i, 1); }),
   };
 }
 const cfg = window.FIREBASE_CONFIG;
@@ -401,6 +506,9 @@ const state = {
   activeId: null,
   editingId: null,
   draftLoc: null,
+  stay: null,
+  plans: [],
+  planDay: 0,
 };
 
 function toast(msg) {
@@ -426,15 +534,17 @@ $("whoGrid").addEventListener("click", (e) => {
 $("meChip").onclick = openWho;
 
 /* ───────── 탭 ───────── */
+const TABS = { map: ["tabMap", "viewMap"], plan: ["tabPlan", "viewPlan"], stay: ["tabStay", "viewStay"], flights: ["tabFlights", "viewFlights"] };
 function setTab(which) {
-  const isMap = which === "map";
-  $("tabMap").setAttribute("aria-selected", isMap);
-  $("tabFlights").setAttribute("aria-selected", !isMap);
-  $("viewMap").hidden = !isMap; $("viewFlights").hidden = isMap;
-  if (isMap) setTimeout(relayout, 0);
+  for (const [k, [t, v]] of Object.entries(TABS)) {
+    $(t).setAttribute("aria-selected", k === which);
+    $(v).hidden = k !== which;
+  }
+  if (which === "map") setTimeout(relayout, 0);
+  if (which === "plan") renderPlan();
+  if (which === "stay") renderStay();
 }
-$("tabMap").onclick = () => setTab("map");
-$("tabFlights").onclick = () => setTab("flights");
+for (const k of Object.keys(TABS)) $(TABS[k][0]).onclick = () => setTab(k);
 $("flightChip").onclick = () => setTab("flights");
 function setScreenH() { document.documentElement.style.setProperty("--screen-h", innerHeight + "px"); }
 const touch = matchMedia("(pointer: coarse)").matches;
@@ -543,10 +653,41 @@ function renderMarkers() {
     o.setContent(pinEl(p, sel));
     o.setZIndex(sel ? 10 : 1);
   }
-  if (infoOverlay) {
+  renderStayMarker();
+  if (infoOverlay && state.activeId !== "__stay") {
     const p = state.places.find((x) => x.id === state.activeId);
     if (p && visible.has(p.id)) openInfo(p); else closeInfo();
   }
+}
+let stayOverlay = null;
+function renderStayMarker() {
+  if (!map) return;
+  const st = state.stay;
+  if (!st || !isFinite(st.lat) || !isFinite(st.lng)) { if (stayOverlay) { stayOverlay.setMap(null); stayOverlay = null; } return; }
+  const el = document.createElement("button");
+  el.type = "button"; el.className = "pin c-stay"; el.setAttribute("aria-label", "숙소 " + st.name);
+  el.innerHTML = "<span>숙</span>";
+  el.onclick = () => openStayInfo();
+  if (!stayOverlay) {
+    stayOverlay = new kakao.maps.CustomOverlay({ position: LL(st.lat, st.lng), content: el, yAnchor: 1.2, clickable: true, zIndex: 5 });
+    stayOverlay.setMap(map);
+  } else { stayOverlay.setPosition(LL(st.lat, st.lng)); stayOverlay.setContent(el); }
+}
+function openStayInfo() {
+  const st = state.stay; if (!st || !map) return;
+  closeInfo(); state.activeId = "__stay";
+  const wrap = document.createElement("div");
+  wrap.className = "info-wrap";
+  const link = safeUrl(st.link);
+  wrap.innerHTML = `<div class="info"><div class="pop"><strong>${esc(st.name)}</strong>
+    <span class="meta">숙소 · 체크인 ${esc(fmtShort(st.inDate))} ${esc(st.inTime || "")}</span>
+    <div class="links"><a href="${esc(st.kakaoUrl || "https://map.kakao.com/link/search/" + encodeURIComponent(st.name))}" target="_blank" rel="noopener">카카오맵</a>
+    ${link ? `<a href="${esc(link)}" target="_blank" rel="noopener">예약 링크</a>` : ""}</div></div>
+    <button type="button" class="info-x" aria-label="닫기">×</button></div>`;
+  wrap.querySelector(".info-x").onclick = closeInfo;
+  infoOverlay = new kakao.maps.CustomOverlay({ position: LL(st.lat, st.lng), content: wrap, yAnchor: 1, clickable: true, zIndex: 50 });
+  infoOverlay.setMap(map);
+  renderList();
 }
 function selectPlace(id, fly) {
   state.activeId = id;
@@ -688,18 +829,16 @@ $("addBtn").onclick = () => openSheet(null);
 $("sheetClose").onclick = closeSheet;
 $("sheetCancel").onclick = closeSheet;
 
-function search() {
-  const q = $("fSearch").value.trim() || $("fName").value.trim();
+function kakaoSearch(q, r, onPick, emptyMsg) {
   if (!q) return;
-  const r = $("results");
   const msg = (t) => { r.hidden = false; r.innerHTML = `<li><button type="button" disabled>${esc(t)}</button></li>`; };
   if (!kPlaces) return msg("지도가 아직 준비되지 않았어요. 잠시 후 다시 검색해 주세요.");
   msg("검색 중…");
   const bounds = new kakao.maps.LatLngBounds(LL(...JEJU.sw), LL(...JEJU.ne));
   kPlaces.keywordSearch(q, (data, status) => {
     const S = kakao.maps.services.Status;
-    if (status === S.ZERO_RESULT) return msg("제주에서 찾은 결과가 없어요. 지도를 눌러 직접 찍어주세요.");
-    if (status !== S.OK) return msg("검색에 실패했어요. 지도를 눌러 위치를 찍어주세요.");
+    if (status === S.ZERO_RESULT) return msg(emptyMsg);
+    if (status !== S.OK) return msg("검색에 실패했어요. 잠시 후 다시 시도해 주세요.");
     r.innerHTML = data.map((d, i) => {
       const kind = (d.category_name || "").split(">").pop().trim();
       const addr = d.road_address_name || d.address_name;
@@ -707,16 +846,20 @@ function search() {
     }).join("");
     r.onclick = (e) => {
       const b = e.target.closest("button[data-i]"); if (!b) return;
-      const d = data[+b.dataset.i];
-      const lat = +d.y, lng = +d.x;
-      setDraftLoc(lat, lng, d.road_address_name || d.address_name, d.place_url, false);
-      if (!$("fName").value.trim() || !state.editingId) $("fName").value = d.place_name;
-      const cat = KAKAO_CAT[d.category_group_code];
-      if (cat) $({ food: "catFood", cafe: "catCafe", fun: "catFun" }[cat]).checked = true;
-      if (map) { if (map.getLevel() > 5) map.setLevel(5); map.setCenter(LL(lat, lng)); }
       r.hidden = true;
+      onPick(data[+b.dataset.i]);
     };
   }, { bounds, size: 8 });
+}
+function search() {
+  kakaoSearch($("fSearch").value.trim() || $("fName").value.trim(), $("results"), (d) => {
+    const lat = +d.y, lng = +d.x;
+    setDraftLoc(lat, lng, d.road_address_name || d.address_name, d.place_url, false);
+    if (!$("fName").value.trim() || !state.editingId) $("fName").value = d.place_name;
+    const cat = KAKAO_CAT[d.category_group_code];
+    if (cat) $({ food: "catFood", cafe: "catCafe", fun: "catFun" }[cat]).checked = true;
+    if (map) { if (map.getLevel() > 5) map.setLevel(5); map.setCenter(LL(lat, lng)); }
+  }, "제주에서 찾은 결과가 없어요. 지도를 눌러 직접 찍어주세요.");
 }
 $("searchBtn").onclick = search;
 $("fSearch").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); search(); } });
@@ -830,6 +973,292 @@ function renderFlightForm(f) {
   };
 }
 
+/* ───────── 공통: 시간 ───────── */
+const toMin = (t) => { const m = /^(\d{1,2}):(\d{2})$/.exec(t || ""); return m ? +m[1] * 60 + +m[2] : null; };
+const fmtMin = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+const floor30 = (m) => Math.floor(m / 30) * 30;
+function fmtShort(date) { const d = parseD(date); return d ? `${d.getMonth() + 1}/${d.getDate()} (${WD[d.getDay()]})` : ""; }
+function addDays(date, n) { const d = parseD(date); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function durText(m) { const h = Math.floor(m / 60), r = m % 60; return h && r ? `${h}시간 ${r}분` : h ? `${h}시간` : `${r}분`; }
+
+function openModal(html) { $("modal").innerHTML = `<div class="modal-card" role="dialog" aria-modal="true">${html}</div>`; $("modal").hidden = false; }
+function closeModal() { $("modal").hidden = true; $("modal").innerHTML = ""; }
+$("modal").addEventListener("click", (e) => { if (e.target === $("modal")) closeModal(); });
+addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("modal").hidden) closeModal(); });
+
+/* ───────── 숙소 ───────── */
+let stayEditing = false;
+function nightsOf(st) {
+  const a = parseD(st.inDate), b = parseD(st.outDate);
+  if (!a || !b || b <= a) return null;
+  return Math.round((b - a) / 86400000);
+}
+function renderStay() {
+  if (stayEditing) return renderStayForm();
+  const st = state.stay;
+  if (!st) {
+    $("stayView").innerHTML = `<div class="flights-head"><div><h2>숙소</h2><p>모두 같은 숙소에 묵어요.</p></div></div>
+      <div class="plan-empty"><b>숙소를 아직 등록하지 않았어요</b>예약한 숙소를 등록하면 지도와 계획표에 함께 표시돼요.<br>
+      <button class="btn primary" type="button" id="stayEditBtn">숙소 등록</button></div>`;
+  } else {
+    const n = nightsOf(st), link = safeUrl(st.link);
+    $("stayView").innerHTML = `<div class="flights-head"><div><h2>숙소</h2><p>모두 같은 숙소에 묵어요.</p></div>
+        <button class="btn primary" type="button" id="stayEditBtn">숙소 수정</button></div>
+      <article class="stay-card">
+        <div class="stay-top"><span class="dot c-stay" aria-hidden="true">숙</span>
+          <div><h3>${esc(st.name)}</h3>${st.addr ? `<small>${esc(st.addr)}</small>` : ""}</div></div>
+        <div class="stay-times">
+          <div><small>체크인</small><b>${esc(fmtShort(st.inDate) || "날짜 미정")} ${esc(st.inTime || "")}</b></div>
+          ${n ? `<span class="nights">${n}박</span>` : "<span></span>"}
+          <div class="to"><small>체크아웃</small><b>${esc(fmtShort(st.outDate) || "날짜 미정")} ${esc(st.outTime || "")}</b></div>
+        </div>
+        ${st.memo ? `<p class="stay-memo">${esc(st.memo)}</p>` : ""}
+        <div class="stay-foot">
+          ${isFinite(st.lat) ? `<button type="button" class="textbtn" id="stayOnMap">지도에서 보기</button>` : ""}
+          <a href="${esc(st.kakaoUrl || "https://map.kakao.com/link/search/" + encodeURIComponent(st.name))}" target="_blank" rel="noopener">카카오맵</a>
+          ${link ? `<a href="${esc(link)}" target="_blank" rel="noopener">예약 링크</a>` : ""}
+          ${st.updatedBy ? `<span>마지막 수정: ${esc(st.updatedBy)}</span>` : ""}
+        </div>
+      </article>`;
+    const onMap = $("stayOnMap");
+    if (onMap) onMap.onclick = () => {
+      setTab("map");
+      setTimeout(() => { if (!map) return; if (map.getLevel() > 6) map.setLevel(6); map.panTo(LL(st.lat, st.lng)); openStayInfo(); }, 60);
+    };
+  }
+  $("stayEditBtn").onclick = () => { if (!state.me) return openWho(); stayEditing = true; renderStay(); };
+}
+let stayDraft = null;
+function renderStayForm() {
+  const st = state.stay || {}, f = state.flights || {};
+  stayDraft = isFinite(st.lat) ? { lat: st.lat, lng: st.lng, addr: st.addr || "", url: st.kakaoUrl || "" } : null;
+  const v = (x) => esc(x || "");
+  $("stayView").innerHTML = `<div class="flights-head"><div><h2>${state.stay ? "숙소 수정" : "숙소 등록"}</h2><p>입력하면 모두에게 똑같이 보여요.</p></div></div>
+    <form class="fform" id="stayForm" novalidate>
+      <div class="field"><label for="s-name">숙소 이름</label><input class="input" id="s-name" maxlength="60" value="${v(st.name)}" placeholder="예: 애월 오션뷰 펜션"></div>
+      <div class="field"><label for="s-search">위치</label>
+        <div class="row"><input class="input" id="s-search" placeholder="카카오맵에서 숙소명·주소 검색" autocomplete="off"><button class="btn small" type="button" id="s-searchBtn">검색</button></div>
+        <ul class="results" id="s-results" hidden></ul>
+        <div class="loc${stayDraft ? " set" : ""}" id="s-loc">${stayDraft ? "📍 " + esc(stayDraft.addr || "위치 지정됨") : "위치를 아직 정하지 않았어요"}</div>
+      </div>
+      <fieldset>
+        <div class="field"><label for="s-inDate">체크인 날짜</label><input class="input" type="date" id="s-inDate" value="${v(st.inDate || (f.out && f.out.date))}"></div>
+        <div class="field"><label for="s-inTime">체크인 시각</label><input class="input" type="time" id="s-inTime" value="${v(st.inTime || "15:00")}"></div>
+        <div class="field"><label for="s-outDate">체크아웃 날짜</label><input class="input" type="date" id="s-outDate" value="${v(st.outDate || (f.back && f.back.date))}"></div>
+        <div class="field"><label for="s-outTime">체크아웃 시각</label><input class="input" type="time" id="s-outTime" value="${v(st.outTime || "11:00")}"></div>
+      </fieldset>
+      <div class="field"><label for="s-link">예약 링크 (선택)</label><input class="input" type="url" id="s-link" value="${v(st.link)}" placeholder="에어비앤비, 야놀자 예약 페이지 등"></div>
+      <div class="field"><label for="s-memo">메모 (선택)</label><textarea class="input" id="s-memo" maxlength="400" placeholder="예: 주차 2대 가능, 바비큐 신청 필요">${v(st.memo)}</textarea></div>
+      <p class="err" id="s-err" hidden></p>
+      <div class="fform-foot"><button class="btn ghost" type="button" id="s-cancel">취소</button><button class="btn primary" type="submit">저장</button></div>
+    </form>`;
+  const doSearch = () => kakaoSearch($("s-search").value.trim() || $("s-name").value.trim(), $("s-results"), (d) => {
+    stayDraft = { lat: +d.y, lng: +d.x, addr: d.road_address_name || d.address_name, url: d.place_url };
+    if (!$("s-name").value.trim()) $("s-name").value = d.place_name;
+    $("s-loc").classList.add("set"); $("s-loc").textContent = "📍 " + stayDraft.addr;
+  }, "제주에서 찾은 결과가 없어요. 숙소 주소로 검색해 보세요.");
+  $("s-searchBtn").onclick = doSearch;
+  $("s-search").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); doSearch(); } });
+  $("s-cancel").onclick = () => { stayEditing = false; renderStay(); };
+  $("stayForm").onsubmit = (e) => {
+    e.preventDefault();
+    const err = (m) => { $("s-err").textContent = m; $("s-err").hidden = false; };
+    const name = $("s-name").value.trim();
+    if (!name) return err("숙소 이름을 입력해 주세요.");
+    const link = $("s-link").value.trim();
+    if (link && !safeUrl(link)) return err("링크는 http:// 또는 https:// 로 시작해야 해요.");
+    const data = {
+      name, link, memo: $("s-memo").value.trim(),
+      inDate: $("s-inDate").value, inTime: $("s-inTime").value, outDate: $("s-outDate").value, outTime: $("s-outTime").value,
+      lat: stayDraft ? stayDraft.lat : null, lng: stayDraft ? stayDraft.lng : null,
+      addr: stayDraft ? stayDraft.addr : "", kakaoUrl: stayDraft ? stayDraft.url : "",
+      updatedBy: state.me, updatedAt: Date.now(),
+    };
+    Store.saveStay(data).then(() => { stayEditing = false; toast("숙소를 저장했어요"); renderStay(); }).catch(fail);
+  };
+}
+
+/* ───────── 계획표 ───────── */
+const ROW = 46;
+function tripDays() {
+  const f = state.flights;
+  if (!f || !f.out || !f.out.date || !f.back || !f.back.date) return null;
+  const days = [];
+  for (let d = f.out.date; d <= f.back.date && days.length < 14; d = addDays(d, 1)) days.push(d);
+  return days.length ? days : null;
+}
+function fixedEvents(date) {
+  const f = state.flights || {}, st = state.stay, ev = [];
+  const leg = (l, label, timeKey) => {
+    const m = toMin(l[timeKey]); if (m == null) return;
+    ev.push({ fixed: true, start: floor30(m), dur: 30, title: label, sub: `${l[timeKey]} · ${[l.airline, l.no].filter(Boolean).join(" ")}` });
+  };
+  if (f.out && f.out.date === date) leg(f.out, "✈ 제주 도착", "arrTime");
+  if (f.back && f.back.date === date) leg(f.back, "✈ 귀가편 출발", "depTime");
+  if (st) {
+    const add = (d, t, label) => { const m = toMin(t); if (d === date && m != null) ev.push({ fixed: true, start: floor30(m), dur: 30, title: label, sub: `${t} · ${st.name}` }); };
+    add(st.inDate, st.inTime, "체크인");
+    add(st.outDate, st.outTime, "체크아웃");
+  }
+  return ev;
+}
+function dayRange(date, days, items) {
+  const f = state.flights;
+  let start = 7 * 60, end = 24 * 60;
+  if (date === days[0] && toMin(f.out.arrTime) != null) start = floor30(toMin(f.out.arrTime));
+  if (date === days[days.length - 1] && toMin(f.back.depTime) != null) end = floor30(toMin(f.back.depTime)) + 30;
+  for (const it of items) { start = Math.min(start, it.start); end = Math.max(end, it.start + it.dur); }
+  if (end <= start) end = start + 60;
+  return [start, Math.min(end, 24 * 60)];
+}
+function layoutLanes(items) {
+  const sorted = [...items].sort((a, b) => a.start - b.start || b.dur - a.dur);
+  let cluster = [], clusterEnd = -1;
+  const flush = () => {
+    const lanes = [];
+    for (const it of cluster) {
+      let li = lanes.findIndex((end) => end <= it.start);
+      if (li < 0) { li = lanes.length; lanes.push(0); }
+      lanes[li] = it.start + it.dur; it.lane = li;
+    }
+    for (const it of cluster) it.lanes = lanes.length;
+    cluster = [];
+  };
+  for (const it of sorted) {
+    if (it.start >= clusterEnd && cluster.length) flush();
+    cluster.push(it); clusterEnd = Math.max(clusterEnd, it.start + it.dur);
+  }
+  flush();
+  return sorted;
+}
+function planLabel(p) {
+  if (p.placeId) {
+    const pl = state.places.find((x) => x.id === p.placeId);
+    return pl ? { title: pl.name, cat: pl.cat } : { title: "(삭제된 장소)", cat: "free" };
+  }
+  return { title: p.title || "일정", cat: "free" };
+}
+function renderPlan() {
+  const days = tripDays();
+  if (!days) {
+    $("plan").innerHTML = `<div class="flights-head"><div><h2>계획표</h2><p>30분 단위로 하루 일정을 같이 짜요.</p></div></div>
+      <div class="plan-empty"><b>항공편을 먼저 입력해 주세요</b>가는 날과 오는 날을 입력하면 그 기간으로 계획표가 만들어져요.<br>
+      <button class="btn primary" type="button" id="goFlights">항공편 입력하러 가기</button></div>`;
+    $("goFlights").onclick = () => setTab("flights");
+    return;
+  }
+  if (state.planDay >= days.length) state.planDay = 0;
+  const date = days[state.planDay];
+  const plans = state.plans.filter((p) => p.date === date).map((p) => ({ ...p, start: toMin(p.start), dur: +p.dur || 30 })).filter((p) => p.start != null);
+  const items = layoutLanes([...fixedEvents(date), ...plans]);
+  const [start, end] = dayRange(date, days, items);
+  const rows = (end - start) / 30;
+  const dayTabs = days.map((d, i) => `<button type="button" class="day-tab" data-day="${i}" aria-pressed="${i === state.planDay}"><b>${i + 1}일차</b><small>${esc(fmtShort(d))}</small></button>`).join("");
+  let times = "", slots = "";
+  for (let i = 0; i < rows; i++) {
+    const m = start + i * 30, half = m % 60 !== 0;
+    times += `<div class="tl-time${half ? " half" : ""}">${fmtMin(m)}</div>`;
+    slots += `<button type="button" class="tl-slot ${half ? "half" : "hour"}" data-start="${m}" aria-label="${fmtMin(m)}에 일정 추가">+ ${fmtMin(m)} 일정 추가</button>`;
+  }
+  const blocks = items.map((it) => {
+    const top = (it.start - start) / 30 * ROW + 2, h = it.dur / 30 * ROW - 4;
+    const w = 100 / it.lanes, left = w * it.lane;
+    const pos = `top:${top}px;height:${h}px;left:calc(${left}% + 6px);width:calc(${w}% - 12px)`;
+    if (it.fixed) return `<div class="tl-item fixed" style="${pos}"><b>${esc(it.title)}</b><small>${esc(it.sub)}</small></div>`;
+    const lb = planLabel(it);
+    return `<button type="button" class="tl-item c-${lb.cat}" style="${pos}" data-plan="${esc(it.id)}">
+      <b>${esc(lb.title)}</b><small>${fmtMin(it.start)}–${fmtMin(it.start + it.dur)} · ${durText(it.dur)}</small></button>`;
+  }).join("");
+  $("plan").innerHTML = `<div class="flights-head"><div><h2>계획표</h2><p>빈 칸을 누르면 그 시간에 일정을 넣을 수 있어요.</p></div></div>
+    <div class="day-tabs" id="dayTabs">${dayTabs}</div>
+    <div class="timeline" style="--row:${ROW}px">
+      <div class="tl-times">${times}</div>
+      <div class="tl-body" id="tlBody">${slots}${blocks}</div>
+    </div>`;
+  $("dayTabs").onclick = (e) => { const b = e.target.closest("[data-day]"); if (!b) return; state.planDay = +b.dataset.day; renderPlan(); };
+  $("tlBody").onclick = (e) => {
+    const it = e.target.closest("[data-plan]");
+    if (it) return openPlanModal(state.plans.find((p) => p.id === it.dataset.plan));
+    const sl = e.target.closest("[data-start]");
+    if (sl) openPlanModal(null, date, +sl.dataset.start);
+  };
+}
+function openPlanModal(plan, date, startMin) {
+  if (!state.me) return openWho();
+  const days = tripDays(); if (!days) return;
+  date = plan ? plan.date : date;
+  const st = plan ? toMin(plan.start) : startMin;
+  const dur = plan ? +plan.dur : 60;
+  const mode = plan && !plan.placeId ? "free" : "place";
+  let filter = "all";
+  const startOpts = []; for (let m = 0; m < 24 * 60; m += 30) startOpts.push(`<option value="${m}"${m === st ? " selected" : ""}>${fmtMin(m)}</option>`);
+  const durOpts = [30, 60, 90, 120, 150, 180, 240, 300, 360, 480].map((m) => `<option value="${m}"${m === dur ? " selected" : ""}>${durText(m)}</option>`).join("");
+  openModal(`<form id="planForm" novalidate style="display:contents">
+    <div class="sheet-head"><h2>${plan ? "일정 수정" : "일정 추가"} · ${esc(fmtShort(date))}</h2><button class="btn small ghost" type="button" id="pClose">닫기</button></div>
+    <div class="sheet-body">
+      <div class="two">
+        <div class="field"><label for="pStart">시작</label><select class="input" id="pStart">${startOpts.join("")}</select></div>
+        <div class="field"><label for="pDur">소요 시간</label><select class="input" id="pDur">${durOpts}</select></div>
+      </div>
+      <div class="field"><span class="lbl">무엇을 할까요</span>
+        <div class="seg2">
+          <label><input type="radio" name="pMode" value="place" id="pModePlace"${mode === "place" ? " checked" : ""}><span>등록한 장소</span></label>
+          <label><input type="radio" name="pMode" value="free" id="pModeFree"${mode === "free" ? " checked" : ""}><span>직접 입력</span></label>
+        </div>
+      </div>
+      <div class="field" id="pPlaceBox">
+        <div class="filters" id="pFilters"></div>
+        <ul class="pick-list" id="pList"></ul>
+      </div>
+      <div class="field" id="pFreeBox">
+        <label for="pTitle">일정 이름</label>
+        <input class="input" id="pTitle" maxlength="60" value="${esc(plan && !plan.placeId ? plan.title : "")}" placeholder="예: 렌터카 픽업, 자유시간">
+      </div>
+      <p class="err" id="pErr" hidden></p>
+    </div>
+    <div class="sheet-foot">
+      ${plan ? `<button class="btn danger" type="button" id="pDel">삭제</button>` : ""}
+      <button class="btn ghost" type="button" id="pCancel">취소</button>
+      <button class="btn primary" type="submit">${plan ? "저장" : "추가"}</button>
+    </div></form>`);
+  let picked = plan ? plan.placeId : "";
+  const drawList = () => {
+    const chip = (k, label) => `<button type="button" class="fchip" data-f="${k}" aria-pressed="${filter === k}">${k !== "all" ? `<span class="sw c-${k}"></span>` : ""}${label}</button>`;
+    $("pFilters").innerHTML = chip("all", "전체") + Object.entries(CATS).map(([k, c]) => chip(k, c.label)).join("");
+    const list = state.places.filter((p) => filter === "all" || p.cat === filter);
+    $("pList").innerHTML = list.length ? list.map((p) => `<li><label>
+        <input type="radio" name="pPlace" value="${esc(p.id)}"${p.id === picked ? " checked" : ""}>
+        <span class="dot c-${p.cat}" aria-hidden="true">${CATS[p.cat].short}</span>
+        <span class="t"><b>${esc(p.name)}</b>${p.addr ? `<small>${esc(p.addr)}</small>` : ""}</span></label></li>`).join("")
+      : `<li class="none">${state.places.length ? "이 종류로 등록된 장소가 없어요." : "아직 등록된 장소가 없어요. 지도 · 장소 탭에서 먼저 추가해 주세요."}</li>`;
+  };
+  const syncMode = () => {
+    const free = $("pModeFree").checked;
+    $("pPlaceBox").hidden = free; $("pFreeBox").hidden = !free;
+  };
+  drawList(); syncMode();
+  $("pFilters").onclick = (e) => { const b = e.target.closest("[data-f]"); if (!b) return; filter = b.dataset.f; drawList(); };
+  $("pList").onchange = (e) => { if (e.target.name === "pPlace") picked = e.target.value; };
+  $("pModePlace").onchange = syncMode; $("pModeFree").onchange = syncMode;
+  $("pClose").onclick = closeModal; $("pCancel").onclick = closeModal;
+  if (plan) $("pDel").onclick = () => {
+    if (!confirm("이 일정을 계획표에서 뺄까요?")) return;
+    Store.deletePlan(plan.id).then(() => { closeModal(); toast("일정을 뺐어요"); }).catch(fail);
+  };
+  $("planForm").onsubmit = (e) => {
+    e.preventDefault();
+    const err = (m) => { $("pErr").textContent = m; $("pErr").hidden = false; };
+    const free = $("pModeFree").checked;
+    const startM = +$("pStart").value, durM = +$("pDur").value;
+    if (startM + durM > 24 * 60) return err("자정을 넘기지 않게 시작 시간이나 소요 시간을 줄여 주세요.");
+    const data = { date, start: fmtMin(startM), dur: durM, placeId: "", title: "" };
+    if (free) { data.title = $("pTitle").value.trim(); if (!data.title) return err("일정 이름을 입력해 주세요."); }
+    else { if (!picked) return err("넣을 장소를 골라 주세요."); data.placeId = picked; }
+    const job = plan ? Store.updatePlan(plan.id, data) : Store.addPlan({ ...data, by: state.me });
+    job.then(() => { closeModal(); toast(plan ? "일정을 수정했어요" : "계획표에 넣었어요"); }).catch(fail);
+  };
+}
+
 /* ───────── 시작 ───────── */
 function renderAll() { renderFilters(); renderList(); renderMarkers(); }
 renderMe(); fitChrome(); renderAll(); renderFlights(); loadKakao();
@@ -837,11 +1266,26 @@ if (!state.me) openWho();
 const loadErr = (e) => { console.error(e); toast("데이터를 불러오지 못했어요. 새로고침해 주세요."); };
 Store.onPlaces((list) => {
   state.places = list.filter((p) => CATS[p.cat] && isFinite(p.lat) && isFinite(p.lng));
-  if (state.activeId && !state.places.some((p) => p.id === state.activeId)) state.activeId = null;
+  if (state.activeId && state.activeId !== "__stay" && !state.places.some((p) => p.id === state.activeId)) state.activeId = null;
   renderAll();
+  if (!$("viewPlan").hidden) renderPlan();
 }, loadErr);
-Store.onFlights((f) => { state.flights = f; if (!flightEditing) renderFlights(); else renderFlightChip(); }, loadErr);
-if (location.hash === "#flights") setTab("flights");
+Store.onFlights((f) => {
+  state.flights = f;
+  if (!flightEditing) renderFlights(); else renderFlightChip();
+  if (!$("viewPlan").hidden) renderPlan();
+}, loadErr);
+Store.onStay((st) => {
+  state.stay = st;
+  if (!stayEditing && !$("viewStay").hidden) renderStay();
+  if (!$("viewPlan").hidden) renderPlan();
+  renderStayMarker();
+}, loadErr);
+Store.onPlans((list) => {
+  state.plans = list;
+  if (!$("viewPlan").hidden) renderPlan();
+}, loadErr);
+if (TABS[location.hash.slice(1)]) setTab(location.hash.slice(1));
 })();
 </script>
 </body>
