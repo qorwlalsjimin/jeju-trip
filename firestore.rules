@@ -1,0 +1,26 @@
+rules_version = '2';
+// 우리들의 제주 — Firestore 보안 규칙
+// 사이트를 연 사람만(익명 로그인) 읽고 쓸 수 있고, 저장되는 값의 형식과 길이를 제한합니다.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /places/{placeId} {
+      allow read: if request.auth != null;
+      allow delete: if request.auth != null;
+      allow create, update: if request.auth != null
+        && request.resource.data.cat in ['food', 'cafe', 'fun']
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 60
+        && request.resource.data.lat is number
+        && request.resource.data.lng is number
+        && request.resource.data.get('memo', '').size() <= 400
+        && request.resource.data.get('link', '').size() <= 500
+        && request.resource.data.get('likes', []).size() <= 8;
+    }
+
+    match /trip/{docId} {
+      allow read, write: if request.auth != null && docId == 'flights';
+    }
+  }
+}
